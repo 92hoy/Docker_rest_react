@@ -7,10 +7,17 @@ from django.db import connections
 #REST-API
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-from .serializers import SampleSerializer
+from rest_framework import generics
+from app.serializers import SampleSerializer
+from app.serializers import LeadSerializer
+from app.models import Lead
 
 #UTIL
 import json
+
+class LeadListCreate(generics.ListCreateAPIView):
+    queryset = Lead.objects.all()
+    serializer_class = LeadSerializer
 
 def sample(request):
 
@@ -28,9 +35,9 @@ def sample(request):
         cur.execute(query)
         rows = cur.fetchall()
     """
-    
+
     context = {}
-    context['sample_key'] = 'sample_val'
+    context['sample_key'] = 'hello world'
 
     return render(request, 'app/sample.html', context)
     #return JsonResponse({'a':'b'})
@@ -40,7 +47,7 @@ class SampleView(CreateAPIView):
     serializer_class = SampleSerializer
 
     def create(self, request):
- 
+
         id = request.POST.get('id')
         print("id = ", id)
 
